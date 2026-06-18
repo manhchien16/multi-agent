@@ -1,0 +1,392 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://multi-agent-platform.com/schemas/events/workflow_events.json",
+  "title": "Workflow Events Schema",
+  "description": "Schema definitions for workflow lifecycle events",
+  
+  "definitions": {
+    "base_event": {
+      "type": "object",
+      "required": ["event_id", "event_type", "version", "timestamp", "source", "workflow_id"],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this event"
+        },
+        "event_type": {
+          "type": "string",
+          "description": "Type of the event"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "Schema version (e.g., '1.0')"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when event occurred"
+        },
+        "source": {
+          "type": "object",
+          "required": ["agent_id", "agent_type"],
+          "properties": {
+            "agent_id": {
+              "type": "string",
+              "description": "ID of the agent that emitted the event"
+            },
+            "agent_type": {
+              "type": "string",
+              "enum": [
+                "orchestrator",
+                "spec",
+                "planner",
+                "router",
+                "backend_coding",
+                "frontend_coding",
+                "devops_coding",
+                "database_coding",
+                "review",
+                "test",
+                "evaluation",
+                "approval"
+              ]
+            },
+            "instance_id": {
+              "type": "string",
+              "description": "Specific instance/pod identifier"
+            }
+          }
+        },
+        "workflow_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID of the workflow this event relates to"
+        },
+        "correlation_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID for correlating related events"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Additional metadata"
+        }
+      }
+    },
+    
+    "workflow_started": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.started"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["workflow_name", "workflow_type", "tenant_id", "created_by"],
+              "properties": {
+                "workflow_name": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "workflow_type": {
+                  "type": "string",
+                  "examples": ["software_development", "bug_fix", "feature_development"]
+                },
+                "workflow_version": {
+                  "type": "string"
+                },
+                "tenant_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "definition": {
+                  "type": "object",
+                  "description": "Workflow definition"
+                },
+                "context": {
+                  "type": "object",
+                  "description": "Initial workflow context"
+                },
+                "total_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "estimated_duration_minutes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "estimated_cost_usd": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "workflow_completed": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.completed"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status", "started_at", "completed_at", "duration_ms"],
+              "properties": {
+                "status": {
+                  "const": "completed"
+                },
+                "started_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "completed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "duration_ms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "total_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "completed_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "failed_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "cost_consumed_usd": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "tokens_consumed": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "artifacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "description": "URLs to generated artifacts"
+                },
+                "evaluation_score": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "workflow_failed": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.failed"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status", "error", "started_at", "failed_at"],
+              "properties": {
+                "status": {
+                  "const": "failed"
+                },
+                "error": {
+                  "type": "object",
+                  "required": ["code", "message"],
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object"
+                    },
+                    "stack_trace": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "failed_task_id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "started_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "failed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "completed_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "cost_consumed_usd": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "recovery_action": {
+                  "type": "string",
+                  "enum": ["retry", "rollback", "manual_intervention", "none"]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "workflow_cancelled": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.cancelled"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status", "cancelled_by", "reason"],
+              "properties": {
+                "status": {
+                  "const": "cancelled"
+                },
+                "cancelled_by": {
+                  "type": "string",
+                  "description": "User or agent that cancelled the workflow"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "started_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "cancelled_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "completed_tasks": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "workflow_paused": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.paused"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status", "reason"],
+              "properties": {
+                "status": {
+                  "const": "paused"
+                },
+                "reason": {
+                  "type": "string"
+                },
+                "paused_by": {
+                  "type": "string"
+                },
+                "paused_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "can_resume": {
+                  "type": "boolean"
+                },
+                "resume_conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "workflow_resumed": {
+      "allOf": [
+        {"$ref": "#/definitions/base_event"},
+        {
+          "properties": {
+            "event_type": {
+              "const": "workflow.resumed"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status", "resumed_by"],
+              "properties": {
+                "status": {
+                  "const": "in_progress"
+                },
+                "resumed_by": {
+                  "type": "string"
+                },
+                "resumed_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "paused_duration_ms": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  
+  "oneOf": [
+    {"$ref": "#/definitions/workflow_started"},
+    {"$ref": "#/definitions/workflow_completed"},
+    {"$ref": "#/definitions/workflow_failed"},
+    {"$ref": "#/definitions/workflow_cancelled"},
+    {"$ref": "#/definitions/workflow_paused"},
+    {"$ref": "#/definitions/workflow_resumed"}
+  ]
+}
