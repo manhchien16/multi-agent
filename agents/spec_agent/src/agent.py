@@ -15,7 +15,7 @@ Capabilities:
 
 import json
 from typing import Dict, Any, List, Optional
-from dataclots import dataclass
+from dataclasses import dataclass
 
 from langchain.chat_models import ChatAnthropic, ChatOpenAI
 from langchain.prompts import ChatPromptTemplate

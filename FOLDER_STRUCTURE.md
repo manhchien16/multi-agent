@@ -790,31 +790,37 @@ monitoring/
 ## File Organization Principles
 
 ### 1. **Separation of Concerns**
+
 - Each agent is self-contained with its own dependencies
 - Shared utilities are extracted to `agents/shared/`
 - Services are independent and loosely coupled
 
 ### 2. **Discoverability**
+
 - Clear naming conventions
 - README in every major directory
 - Documentation co-located with code
 
 ### 3. **Scalability**
+
 - Modular structure allows independent scaling
 - Clear boundaries between components
 - Easy to add new agents without refactoring
 
 ### 4. **Testability**
+
 - Tests co-located with code (`tests/` in each module)
 - Integration tests at top level
 - Clear separation of test types
 
 ### 5. **Deployability**
+
 - Each agent has its own Dockerfile
 - Helm charts for Kubernetes deployment
 - Environment-specific configurations
 
 ### 6. **Maintainability**
+
 - Consistent structure across agents
 - Infrastructure as Code for reproducibility
 - Comprehensive documentation
@@ -850,6 +856,7 @@ Store in `.env` files (not committed):
 ### Configuration Management
 
 Configuration hierarchy:
+
 1. Default configs in code
 2. Environment-specific configs (dev/staging/prod)
 3. Secrets from Vault (production)
@@ -860,20 +867,24 @@ Configuration hierarchy:
 ## Naming Conventions
 
 ### Files
+
 - Python: `snake_case.py`
 - TypeScript: `camelCase.ts` or `PascalCase.tsx` (React components)
 - Config files: `kebab-case.yaml`
 - Shell scripts: `kebab-case.sh`
 
 ### Directories
+
 - All lowercase with underscores: `agent_name/`
 - No spaces in directory names
 
 ### Docker Images
+
 - Format: `registry/component:version`
 - Example: `agents/coding:2.1.0`
 
 ### Helm Charts
+
 - Format: `chart-name`
 - Example: `multi-agent-orchestrator`
 
@@ -890,6 +901,6 @@ This folder structure provides:
 ✅ **Testability**: Tests at unit, integration, and E2E levels  
 ✅ **Observability**: Built-in monitoring and logging  
 ✅ **Security**: Policies and guardrails baked in  
-✅ **Documentation**: Comprehensive docs for all components  
+✅ **Documentation**: Comprehensive docs for all components
 
 The structure supports production-grade operations with hundreds of concurrent agents while maintaining developer productivity and code quality.

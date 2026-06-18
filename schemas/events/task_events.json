@@ -3,11 +3,19 @@
   "$id": "https://multi-agent-platform.com/schemas/events/task_events.json",
   "title": "Task Events Schema",
   "description": "Schema definitions for task lifecycle events",
-  
+
   "definitions": {
     "base_task_event": {
       "type": "object",
-      "required": ["event_id", "event_type", "version", "timestamp", "source", "workflow_id", "payload"],
+      "required": [
+        "event_id",
+        "event_type",
+        "version",
+        "timestamp",
+        "source",
+        "workflow_id",
+        "payload"
+      ],
       "properties": {
         "event_id": {
           "type": "string",
@@ -28,9 +36,9 @@
           "type": "object",
           "required": ["agent_id", "agent_type"],
           "properties": {
-            "agent_id": {"type": "string"},
-            "agent_type": {"type": "string"},
-            "instance_id": {"type": "string"}
+            "agent_id": { "type": "string" },
+            "agent_type": { "type": "string" },
+            "instance_id": { "type": "string" }
           }
         },
         "workflow_id": {
@@ -57,13 +65,13 @@
         }
       }
     },
-    
+
     "task_created": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.created"},
+            "event_type": { "const": "task.created" },
             "payload": {
               "type": "object",
               "required": ["task_id", "name", "category", "specification"],
@@ -130,16 +138,20 @@
         }
       ]
     },
-    
+
     "task_assigned": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.assigned"},
+            "event_type": { "const": "task.assigned" },
             "payload": {
               "type": "object",
-              "required": ["task_id", "assigned_agent_id", "assigned_agent_type"],
+              "required": [
+                "task_id",
+                "assigned_agent_id",
+                "assigned_agent_type"
+              ],
               "properties": {
                 "task_id": {
                   "type": "string",
@@ -159,10 +171,10 @@
                 "model_recommendation": {
                   "type": "object",
                   "properties": {
-                    "primary_model": {"type": "string"},
+                    "primary_model": { "type": "string" },
                     "fallback_models": {
                       "type": "array",
-                      "items": {"type": "string"}
+                      "items": { "type": "string" }
                     }
                   }
                 }
@@ -172,13 +184,13 @@
         }
       ]
     },
-    
+
     "task_started": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.started"},
+            "event_type": { "const": "task.started" },
             "payload": {
               "type": "object",
               "required": ["task_id", "agent_id", "started_at"],
@@ -197,9 +209,9 @@
                 "execution_context": {
                   "type": "object",
                   "properties": {
-                    "sandbox_id": {"type": "string"},
-                    "workspace_path": {"type": "string"},
-                    "environment": {"type": "object"}
+                    "sandbox_id": { "type": "string" },
+                    "workspace_path": { "type": "string" },
+                    "environment": { "type": "object" }
                   }
                 }
               }
@@ -208,16 +220,22 @@
         }
       ]
     },
-    
+
     "task_completed": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.completed"},
+            "event_type": { "const": "task.completed" },
             "payload": {
               "type": "object",
-              "required": ["task_id", "status", "started_at", "completed_at", "duration_ms"],
+              "required": [
+                "task_id",
+                "status",
+                "started_at",
+                "completed_at",
+                "duration_ms"
+              ],
               "properties": {
                 "task_id": {
                   "type": "string",
@@ -249,12 +267,19 @@
                     "properties": {
                       "type": {
                         "type": "string",
-                        "enum": ["file", "code", "document", "report", "image", "other"]
+                        "enum": [
+                          "file",
+                          "code",
+                          "document",
+                          "report",
+                          "image",
+                          "other"
+                        ]
                       },
-                      "path": {"type": "string"},
-                      "url": {"type": "string", "format": "uri"},
-                      "checksum": {"type": "string"},
-                      "size_bytes": {"type": "integer"}
+                      "path": { "type": "string" },
+                      "url": { "type": "string", "format": "uri" },
+                      "checksum": { "type": "string" },
+                      "size_bytes": { "type": "integer" }
                     }
                   }
                 },
@@ -289,13 +314,13 @@
         }
       ]
     },
-    
+
     "task_failed": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.failed"},
+            "event_type": { "const": "task.failed" },
             "payload": {
               "type": "object",
               "required": ["task_id", "status", "error", "failed_at"],
@@ -311,11 +336,11 @@
                   "type": "object",
                   "required": ["code", "message"],
                   "properties": {
-                    "code": {"type": "string"},
-                    "message": {"type": "string"},
-                    "details": {"type": "object"},
-                    "stack_trace": {"type": "string"},
-                    "recoverable": {"type": "boolean"}
+                    "code": { "type": "string" },
+                    "message": { "type": "string" },
+                    "details": { "type": "object" },
+                    "stack_trace": { "type": "string" },
+                    "recoverable": { "type": "boolean" }
                   }
                 },
                 "started_at": {
@@ -347,13 +372,13 @@
         }
       ]
     },
-    
+
     "task_retrying": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.retrying"},
+            "event_type": { "const": "task.retrying" },
             "payload": {
               "type": "object",
               "required": ["task_id", "retry_count", "retry_reason"],
@@ -388,13 +413,13 @@
         }
       ]
     },
-    
+
     "task_cancelled": {
       "allOf": [
-        {"$ref": "#/definitions/base_task_event"},
+        { "$ref": "#/definitions/base_task_event" },
         {
           "properties": {
-            "event_type": {"const": "task.cancelled"},
+            "event_type": { "const": "task.cancelled" },
             "payload": {
               "type": "object",
               "required": ["task_id", "status", "cancelled_by", "reason"],
@@ -423,14 +448,14 @@
       ]
     }
   },
-  
+
   "oneOf": [
-    {"$ref": "#/definitions/task_created"},
-    {"$ref": "#/definitions/task_assigned"},
-    {"$ref": "#/definitions/task_started"},
-    {"$ref": "#/definitions/task_completed"},
-    {"$ref": "#/definitions/task_failed"},
-    {"$ref": "#/definitions/task_retrying"},
-    {"$ref": "#/definitions/task_cancelled"}
+    { "$ref": "#/definitions/task_created" },
+    { "$ref": "#/definitions/task_assigned" },
+    { "$ref": "#/definitions/task_started" },
+    { "$ref": "#/definitions/task_completed" },
+    { "$ref": "#/definitions/task_failed" },
+    { "$ref": "#/definitions/task_retrying" },
+    { "$ref": "#/definitions/task_cancelled" }
   ]
 }

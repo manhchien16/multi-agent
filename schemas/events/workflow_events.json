@@ -3,11 +3,18 @@
   "$id": "https://multi-agent-platform.com/schemas/events/workflow_events.json",
   "title": "Workflow Events Schema",
   "description": "Schema definitions for workflow lifecycle events",
-  
+
   "definitions": {
     "base_event": {
       "type": "object",
-      "required": ["event_id", "event_type", "version", "timestamp", "source", "workflow_id"],
+      "required": [
+        "event_id",
+        "event_type",
+        "version",
+        "timestamp",
+        "source",
+        "workflow_id"
+      ],
       "properties": {
         "event_id": {
           "type": "string",
@@ -76,10 +83,10 @@
         }
       }
     },
-    
+
     "workflow_started": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -87,7 +94,12 @@
             },
             "payload": {
               "type": "object",
-              "required": ["workflow_name", "workflow_type", "tenant_id", "created_by"],
+              "required": [
+                "workflow_name",
+                "workflow_type",
+                "tenant_id",
+                "created_by"
+              ],
               "properties": {
                 "workflow_name": {
                   "type": "string",
@@ -95,7 +107,11 @@
                 },
                 "workflow_type": {
                   "type": "string",
-                  "examples": ["software_development", "bug_fix", "feature_development"]
+                  "examples": [
+                    "software_development",
+                    "bug_fix",
+                    "feature_development"
+                  ]
                 },
                 "workflow_version": {
                   "type": "string"
@@ -133,10 +149,10 @@
         }
       ]
     },
-    
+
     "workflow_completed": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -144,7 +160,12 @@
             },
             "payload": {
               "type": "object",
-              "required": ["status", "started_at", "completed_at", "duration_ms"],
+              "required": [
+                "status",
+                "started_at",
+                "completed_at",
+                "duration_ms"
+              ],
               "properties": {
                 "status": {
                   "const": "completed"
@@ -200,10 +221,10 @@
         }
       ]
     },
-    
+
     "workflow_failed": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -264,10 +285,10 @@
         }
       ]
     },
-    
+
     "workflow_cancelled": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -305,10 +326,10 @@
         }
       ]
     },
-    
+
     "workflow_paused": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -346,10 +367,10 @@
         }
       ]
     },
-    
+
     "workflow_resumed": {
       "allOf": [
-        {"$ref": "#/definitions/base_event"},
+        { "$ref": "#/definitions/base_event" },
         {
           "properties": {
             "event_type": {
@@ -380,13 +401,13 @@
       ]
     }
   },
-  
+
   "oneOf": [
-    {"$ref": "#/definitions/workflow_started"},
-    {"$ref": "#/definitions/workflow_completed"},
-    {"$ref": "#/definitions/workflow_failed"},
-    {"$ref": "#/definitions/workflow_cancelled"},
-    {"$ref": "#/definitions/workflow_paused"},
-    {"$ref": "#/definitions/workflow_resumed"}
+    { "$ref": "#/definitions/workflow_started" },
+    { "$ref": "#/definitions/workflow_completed" },
+    { "$ref": "#/definitions/workflow_failed" },
+    { "$ref": "#/definitions/workflow_cancelled" },
+    { "$ref": "#/definitions/workflow_paused" },
+    { "$ref": "#/definitions/workflow_resumed" }
   ]
 }

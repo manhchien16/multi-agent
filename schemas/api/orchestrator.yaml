@@ -3,18 +3,18 @@ info:
   title: Multi-Agent Platform - Orchestrator API
   description: |
     REST API for the Multi-Agent Software Engineering Platform Orchestrator.
-    
+
     This API provides endpoints for creating and managing workflows, tasks, and monitoring
     the execution of AI agents across the platform.
-    
+
     ## Authentication
     All endpoints require authentication via Bearer token (JWT) or API key.
-    
+
     ## Rate Limiting
     - Free tier: 10 requests/minute
     - Pro tier: 100 requests/minute
     - Enterprise tier: 1000 requests/minute
-    
+
     ## Versioning
     API version is specified in the URL path (e.g., /v1/workflows)
   version: 1.0.0
@@ -62,7 +62,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/WorkflowStatus'
+              $ref: "#/components/schemas/WorkflowStatus"
         - name: workflow_type
           in: query
           description: Filter by workflow type
@@ -103,17 +103,17 @@ paths:
             enum: [asc, desc]
             default: desc
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkflowListResponse'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-    
+                $ref: "#/components/schemas/WorkflowListResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "429":
+          $ref: "#/components/responses/RateLimitError"
+
     post:
       summary: Create workflow
       description: Create a new workflow execution
@@ -123,39 +123,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateWorkflowRequest'
+              $ref: "#/components/schemas/CreateWorkflowRequest"
       responses:
-        '201':
+        "201":
           description: Workflow created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Workflow'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '429':
-          $ref: '#/components/responses/RateLimitError'
-  
+                $ref: "#/components/schemas/Workflow"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "429":
+          $ref: "#/components/responses/RateLimitError"
+
   /workflows/{workflow_id}:
     parameters:
-      - $ref: '#/components/parameters/WorkflowIdParam'
-    
+      - $ref: "#/components/parameters/WorkflowIdParam"
+
     get:
       summary: Get workflow
       description: Retrieve detailed information about a specific workflow
       tags: [Workflows]
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkflowDetail'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-    
+                $ref: "#/components/schemas/WorkflowDetail"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
     patch:
       summary: Update workflow
       description: Update workflow properties (limited to status changes)
@@ -168,19 +168,19 @@ paths:
               type: object
               properties:
                 status:
-                  $ref: '#/components/schemas/WorkflowStatus'
+                  $ref: "#/components/schemas/WorkflowStatus"
       responses:
-        '200':
+        "200":
           description: Workflow updated
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Workflow'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-    
+                $ref: "#/components/schemas/Workflow"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
     delete:
       summary: Cancel workflow
       description: Cancel a running workflow
@@ -193,17 +193,17 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        "204":
           description: Workflow cancelled successfully
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '409':
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "409":
           description: Workflow cannot be cancelled (already completed)
-  
+
   /workflows/{workflow_id}/tasks:
     parameters:
-      - $ref: '#/components/parameters/WorkflowIdParam'
-    
+      - $ref: "#/components/parameters/WorkflowIdParam"
+
     get:
       summary: List workflow tasks
       description: Retrieve all tasks for a specific workflow
@@ -214,13 +214,13 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/TaskStatus'
+              $ref: "#/components/schemas/TaskStatus"
         - name: category
           in: query
           schema:
-            $ref: '#/components/schemas/TaskCategory'
+            $ref: "#/components/schemas/TaskCategory"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
@@ -230,42 +230,42 @@ paths:
                   tasks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      $ref: "#/components/schemas/Task"
                   total_count:
                     type: integer
-  
+
   /workflows/{workflow_id}/status:
     parameters:
-      - $ref: '#/components/parameters/WorkflowIdParam'
-    
+      - $ref: "#/components/parameters/WorkflowIdParam"
+
     get:
       summary: Get workflow status
       description: Get real-time workflow execution status
       tags: [Workflows, Monitoring]
       responses:
-        '200':
+        "200":
           description: Workflow status
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkflowStatus'
-  
+                $ref: "#/components/schemas/WorkflowStatus"
+
   /workflows/{workflow_id}/cost:
     parameters:
-      - $ref: '#/components/parameters/WorkflowIdParam'
-    
+      - $ref: "#/components/parameters/WorkflowIdParam"
+
     get:
       summary: Get workflow cost
       description: Retrieve cost breakdown for workflow execution
       tags: [Workflows, Monitoring]
       responses:
-        '200':
+        "200":
           description: Cost breakdown
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CostBreakdown'
-  
+                $ref: "#/components/schemas/CostBreakdown"
+
   /tasks/{task_id}:
     parameters:
       - name: task_id
@@ -274,21 +274,21 @@ paths:
         schema:
           type: string
           format: uuid
-    
+
     get:
       summary: Get task
       description: Retrieve detailed information about a specific task
       tags: [Tasks]
       responses:
-        '200':
+        "200":
           description: Task details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskDetail'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-  
+                $ref: "#/components/schemas/TaskDetail"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
   /tasks/{task_id}/output:
     parameters:
       - name: task_id
@@ -297,13 +297,13 @@ paths:
         schema:
           type: string
           format: uuid
-    
+
     get:
       summary: Get task output
       description: Retrieve the output artifacts from a completed task
       tags: [Tasks]
       responses:
-        '200':
+        "200":
           description: Task output
           content:
             application/json:
@@ -318,12 +318,12 @@ paths:
                   artifacts:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Artifact'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '409':
+                      $ref: "#/components/schemas/Artifact"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "409":
           description: Task not yet completed
-  
+
   /agents:
     get:
       summary: List agents
@@ -333,13 +333,13 @@ paths:
         - name: agent_type
           in: query
           schema:
-            $ref: '#/components/schemas/AgentType'
+            $ref: "#/components/schemas/AgentType"
         - name: status
           in: query
           schema:
-            $ref: '#/components/schemas/AgentStatus'
+            $ref: "#/components/schemas/AgentStatus"
       responses:
-        '200':
+        "200":
           description: Agent list
           content:
             application/json:
@@ -349,8 +349,8 @@ paths:
                   agents:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Agent'
-  
+                      $ref: "#/components/schemas/Agent"
+
   /agents/{agent_id}:
     parameters:
       - name: agent_id
@@ -358,19 +358,19 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       summary: Get agent
       description: Retrieve detailed information about a specific agent
       tags: [Agents]
       responses:
-        '200':
+        "200":
           description: Agent details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AgentDetail'
-  
+                $ref: "#/components/schemas/AgentDetail"
+
   /agents/{agent_id}/performance:
     parameters:
       - name: agent_id
@@ -378,7 +378,7 @@ paths:
         required: true
         schema:
           type: string
-    
+
     get:
       summary: Get agent performance
       description: Retrieve performance metrics for an agent
@@ -392,13 +392,13 @@ paths:
             maximum: 90
             default: 7
       responses:
-        '200':
+        "200":
           description: Performance metrics
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AgentPerformance'
-  
+                $ref: "#/components/schemas/AgentPerformance"
+
   /approvals:
     get:
       summary: List pending approvals
@@ -408,9 +408,9 @@ paths:
         - name: status
           in: query
           schema:
-            $ref: '#/components/schemas/ApprovalStatus'
+            $ref: "#/components/schemas/ApprovalStatus"
       responses:
-        '200':
+        "200":
           description: Approval list
           content:
             application/json:
@@ -420,8 +420,8 @@ paths:
                   approvals:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Approval'
-  
+                      $ref: "#/components/schemas/Approval"
+
   /approvals/{approval_id}:
     parameters:
       - name: approval_id
@@ -430,19 +430,19 @@ paths:
         schema:
           type: string
           format: uuid
-    
+
     get:
       summary: Get approval
       description: Retrieve detailed approval request
       tags: [Approvals]
       responses:
-        '200':
+        "200":
           description: Approval details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApprovalDetail'
-  
+                $ref: "#/components/schemas/ApprovalDetail"
+
   /approvals/{approval_id}/approve:
     parameters:
       - name: approval_id
@@ -451,7 +451,7 @@ paths:
         schema:
           type: string
           format: uuid
-    
+
     post:
       summary: Approve request
       description: Approve a pending approval request
@@ -468,13 +468,13 @@ paths:
                   description: Optional approval reason
               required: []
       responses:
-        '200':
+        "200":
           description: Approval granted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Approval'
-  
+                $ref: "#/components/schemas/Approval"
+
   /approvals/{approval_id}/reject:
     parameters:
       - name: approval_id
@@ -483,7 +483,7 @@ paths:
         schema:
           type: string
           format: uuid
-    
+
     post:
       summary: Reject request
       description: Reject a pending approval request
@@ -500,13 +500,13 @@ paths:
                   description: Rejection reason
               required: [reason]
       responses:
-        '200':
+        "200":
           description: Approval rejected
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Approval'
-  
+                $ref: "#/components/schemas/Approval"
+
   /metrics/summary:
     get:
       summary: Get metrics summary
@@ -520,21 +520,21 @@ paths:
             enum: [hour, day, week, month]
             default: day
       responses:
-        '200':
+        "200":
           description: Metrics summary
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetricsSummary'
-  
+                $ref: "#/components/schemas/MetricsSummary"
+
   /health:
     get:
       summary: Health check
       description: Check API health status
       tags: [Monitoring]
-      security: []  # No auth required
+      security: [] # No auth required
       responses:
-        '200':
+        "200":
           description: Service is healthy
           content:
             application/json:
@@ -556,12 +556,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    
+
     ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
-  
+
   parameters:
     WorkflowIdParam:
       name: workflow_id
@@ -571,7 +571,7 @@ components:
       schema:
         type: string
         format: uuid
-  
+
   schemas:
     WorkflowStatus:
       type: string
@@ -582,7 +582,7 @@ components:
         - failed
         - cancelled
         - paused
-    
+
     TaskStatus:
       type: string
       enum:
@@ -594,7 +594,7 @@ components:
         - failed
         - cancelled
         - retrying
-    
+
     TaskCategory:
       type: string
       enum:
@@ -608,7 +608,7 @@ components:
         - testing
         - evaluation
         - approval
-    
+
     AgentType:
       type: string
       enum:
@@ -624,7 +624,7 @@ components:
         - test
         - evaluation
         - approval
-    
+
     AgentStatus:
       type: string
       enum:
@@ -632,7 +632,7 @@ components:
         - busy
         - offline
         - error
-    
+
     ApprovalStatus:
       type: string
       enum:
@@ -641,7 +641,7 @@ components:
         - rejected
         - timeout
         - cancelled
-    
+
     CreateWorkflowRequest:
       type: object
       required:
@@ -672,7 +672,7 @@ components:
         context:
           type: object
           description: Additional context for execution
-    
+
     Workflow:
       type: object
       properties:
@@ -687,7 +687,7 @@ components:
         description:
           type: string
         status:
-          $ref: '#/components/schemas/WorkflowStatus'
+          $ref: "#/components/schemas/WorkflowStatus"
         workflow_type:
           type: string
         workflow_version:
@@ -721,10 +721,10 @@ components:
         updated_at:
           type: string
           format: date-time
-    
+
     WorkflowDetail:
       allOf:
-        - $ref: '#/components/schemas/Workflow'
+        - $ref: "#/components/schemas/Workflow"
         - type: object
           properties:
             definition:
@@ -734,20 +734,20 @@ components:
             tasks:
               type: array
               items:
-                $ref: '#/components/schemas/Task'
+                $ref: "#/components/schemas/Task"
             metadata:
               type: object
-    
+
     WorkflowListResponse:
       type: object
       properties:
         workflows:
           type: array
           items:
-            $ref: '#/components/schemas/Workflow'
+            $ref: "#/components/schemas/Workflow"
         pagination:
-          $ref: '#/components/schemas/Pagination'
-    
+          $ref: "#/components/schemas/Pagination"
+
     Task:
       type: object
       properties:
@@ -765,9 +765,9 @@ components:
         description:
           type: string
         category:
-          $ref: '#/components/schemas/TaskCategory'
+          $ref: "#/components/schemas/TaskCategory"
         status:
-          $ref: '#/components/schemas/TaskStatus'
+          $ref: "#/components/schemas/TaskStatus"
         priority:
           type: integer
           minimum: 1
@@ -775,7 +775,7 @@ components:
         assigned_agent_id:
           type: string
         assigned_agent_type:
-          $ref: '#/components/schemas/AgentType'
+          $ref: "#/components/schemas/AgentType"
         retry_count:
           type: integer
         cost_usd:
@@ -797,10 +797,10 @@ components:
         created_at:
           type: string
           format: date-time
-    
+
     TaskDetail:
       allOf:
-        - $ref: '#/components/schemas/Task'
+        - $ref: "#/components/schemas/Task"
         - type: object
           properties:
             specification:
@@ -812,8 +812,8 @@ components:
             artifacts:
               type: array
               items:
-                $ref: '#/components/schemas/Artifact'
-    
+                $ref: "#/components/schemas/Artifact"
+
     Artifact:
       type: object
       properties:
@@ -838,18 +838,18 @@ components:
         created_at:
           type: string
           format: date-time
-    
+
     Agent:
       type: object
       properties:
         agent_id:
           type: string
         agent_type:
-          $ref: '#/components/schemas/AgentType'
+          $ref: "#/components/schemas/AgentType"
         version:
           type: string
         status:
-          $ref: '#/components/schemas/AgentStatus'
+          $ref: "#/components/schemas/AgentStatus"
         max_concurrent_tasks:
           type: integer
         current_task_count:
@@ -867,10 +867,10 @@ components:
         created_at:
           type: string
           format: date-time
-    
+
     AgentDetail:
       allOf:
-        - $ref: '#/components/schemas/Agent'
+        - $ref: "#/components/schemas/Agent"
         - type: object
           properties:
             configuration:
@@ -889,7 +889,7 @@ components:
               type: string
             node_name:
               type: string
-    
+
     AgentPerformance:
       type: object
       properties:
@@ -907,7 +907,7 @@ components:
             type: object
             properties:
               category:
-                $ref: '#/components/schemas/TaskCategory'
+                $ref: "#/components/schemas/TaskCategory"
               success_count:
                 type: integer
               failure_count:
@@ -923,7 +923,7 @@ components:
               avg_evaluation_score:
                 type: number
                 format: double
-    
+
     Approval:
       type: object
       properties:
@@ -939,7 +939,7 @@ components:
         operation_type:
           type: string
         status:
-          $ref: '#/components/schemas/ApprovalStatus'
+          $ref: "#/components/schemas/ApprovalStatus"
         request_description:
           type: string
         required_approvers:
@@ -956,10 +956,10 @@ components:
         expires_at:
           type: string
           format: date-time
-    
+
     ApprovalDetail:
       allOf:
-        - $ref: '#/components/schemas/Approval'
+        - $ref: "#/components/schemas/Approval"
         - type: object
           properties:
             risk_assessment:
@@ -988,7 +988,7 @@ components:
                   timestamp:
                     type: string
                     format: date-time
-    
+
     CostBreakdown:
       type: object
       properties:
@@ -1013,7 +1013,7 @@ components:
             type: object
             properties:
               agent_type:
-                $ref: '#/components/schemas/AgentType'
+                $ref: "#/components/schemas/AgentType"
               cost_usd:
                 type: number
                 format: double
@@ -1033,7 +1033,7 @@ components:
               tokens_used:
                 type: integer
                 format: int64
-    
+
     MetricsSummary:
       type: object
       properties:
@@ -1063,7 +1063,7 @@ components:
           format: int64
         agents_active:
           type: integer
-    
+
     Pagination:
       type: object
       properties:
@@ -1079,7 +1079,7 @@ components:
           type: boolean
         has_prev:
           type: boolean
-    
+
     Error:
       type: object
       required:
@@ -1095,44 +1095,44 @@ components:
         timestamp:
           type: string
           format: date-time
-  
+
   responses:
     UnauthorizedError:
       description: Authentication required or invalid token
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             code: "UNAUTHORIZED"
             message: "Invalid or expired authentication token"
-    
+
     BadRequestError:
       description: Invalid request parameters
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             code: "BAD_REQUEST"
             message: "Invalid workflow definition"
-    
+
     NotFoundError:
       description: Resource not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             code: "NOT_FOUND"
             message: "Workflow not found"
-    
+
     RateLimitError:
       description: Rate limit exceeded
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
           example:
             code: "RATE_LIMIT_EXCEEDED"
             message: "Too many requests. Please try again later."

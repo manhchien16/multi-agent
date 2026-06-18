@@ -32,15 +32,15 @@ The Multi-Agent Software Engineering Platform transforms high-level requirements
 
 ### 1.3 Non-Functional Requirements
 
-| Requirement | Target | Rationale |
-|-------------|--------|-----------|
-| Availability | 99.9% | Critical business operations |
-| P95 Latency | < 500ms | Real-time agent coordination |
-| Throughput | 1000+ tasks/min | Large-scale parallel execution |
-| Concurrent Workflows | 500+ | Multi-tenant operation |
-| Audit Retention | 7 years | Compliance requirements |
-| Multi-tenancy | Full isolation | Enterprise deployment |
-| Disaster Recovery | RPO: 1hr, RTO: 4hr | Business continuity |
+| Requirement          | Target             | Rationale                      |
+| -------------------- | ------------------ | ------------------------------ |
+| Availability         | 99.9%              | Critical business operations   |
+| P95 Latency          | < 500ms            | Real-time agent coordination   |
+| Throughput           | 1000+ tasks/min    | Large-scale parallel execution |
+| Concurrent Workflows | 500+               | Multi-tenant operation         |
+| Audit Retention      | 7 years            | Compliance requirements        |
+| Multi-tenancy        | Full isolation     | Enterprise deployment          |
+| Disaster Recovery    | RPO: 1hr, RTO: 4hr | Business continuity            |
 
 ---
 
@@ -49,6 +49,7 @@ The Multi-Agent Software Engineering Platform transforms high-level requirements
 ### 2.1 Architectural Style
 
 **Event-Driven Microservices Architecture** with:
+
 - Asynchronous message-passing via event bus
 - Agent autonomy with centralized orchestration
 - Stateless agent services with external state management
@@ -117,6 +118,7 @@ Agents are categorized by responsibility:
 **Purpose**: Central workflow coordinator and execution tracker
 
 **Responsibilities**:
+
 - Receive external requests via API
 - Initialize workflow execution contexts
 - Coordinate inter-agent communication
@@ -125,11 +127,13 @@ Agents are categorized by responsibility:
 - Emit workflow lifecycle events
 
 **Inputs**:
+
 - Workflow definitions (YAML/JSON)
 - External triggers (API, webhook, schedule)
 - Agent completion events
 
 **Outputs**:
+
 - Workflow status updates
 - Agent task assignments
 - Execution metrics
@@ -137,6 +141,7 @@ Agents are categorized by responsibility:
 **Scaling Strategy**: Stateless horizontal scaling with distributed locking for workflow ownership
 
 **Technology Stack**:
+
 - Temporal.io (workflow orchestration)
 - Go (service implementation)
 - PostgreSQL (durable state)
@@ -150,6 +155,7 @@ Agents are categorized by responsibility:
 **Purpose**: Convert requirements into actionable technical specifications
 
 **Responsibilities**:
+
 - Parse PRDs, design documents, API specs
 - Extract functional and non-functional requirements
 - Generate user stories with acceptance criteria
@@ -159,12 +165,14 @@ Agents are categorized by responsibility:
 - Identify technical risks and dependencies
 
 **Inputs**:
+
 - Product Requirements Documents (Markdown, PDF)
 - Figma design links
 - API documentation (OpenAPI, GraphQL schemas)
 - Existing codebase context
 
 **Outputs**:
+
 - Technical specification document (structured JSON/YAML)
 - User stories (standardized format)
 - Database schema (DDL + migrations)
@@ -172,17 +180,20 @@ Agents are categorized by responsibility:
 - Architecture diagrams (Mermaid)
 - Risk assessment matrix
 
-**Model Requirements**: 
+**Model Requirements**:
+
 - Long context support (100k+ tokens for full codebase analysis)
 - Strong reasoning capabilities
 - Structured output generation
 
-**Preferred Models**: 
+**Preferred Models**:
+
 - Primary: Claude Opus (long context, reasoning)
 - Fallback: GPT-4 Turbo
 - Cost-optimized: Gemini 1.5 Pro
 
 **Quality Metrics**:
+
 - Specification completeness score (0-100)
 - Requirement coverage percentage
 - Ambiguity detection count
@@ -195,6 +206,7 @@ Agents are categorized by responsibility:
 **Purpose**: Convert specifications into executable task DAG
 
 **Responsibilities**:
+
 - Parse technical specifications
 - Decompose work into atomic tasks
 - Build dependency graph (DAG)
@@ -204,12 +216,14 @@ Agents are categorized by responsibility:
 - Generate execution plan
 
 **Inputs**:
+
 - Technical specification (from Spec Agent)
 - Historical task performance data
 - Agent capability matrix
 - Resource availability
 
 **Outputs**:
+
 - Task graph (DAG structure)
 - Task metadata (priority, complexity, estimated time)
 - Execution order recommendations
@@ -217,6 +231,7 @@ Agents are categorized by responsibility:
 - Resource allocation plan
 
 **Algorithm**:
+
 1. Parse specification into logical work units
 2. Apply dependency analysis (file dependencies, logical dependencies)
 3. Classify tasks by type (backend, frontend, database, infra)
@@ -225,11 +240,13 @@ Agents are categorized by responsibility:
 6. Optimize for parallelism and resource utilization
 
 **Technology Stack**:
+
 - Python (task graph manipulation)
 - NetworkX (graph algorithms)
 - PostgreSQL (task storage)
 
 **Quality Metrics**:
+
 - Graph acyclic validation
 - Dependency accuracy
 - Estimation error rate (vs actual)
@@ -242,6 +259,7 @@ Agents are categorized by responsibility:
 **Purpose**: Select optimal LLM for each task
 
 **Responsibilities**:
+
 - Analyze task characteristics
 - Evaluate model capabilities vs requirements
 - Consider cost, latency, and context constraints
@@ -251,13 +269,13 @@ Agents are categorized by responsibility:
 
 **Routing Decision Factors**:
 
-| Factor | Weight | Considerations |
-|--------|--------|----------------|
-| Task Category | 30% | Code generation, analysis, planning, review |
-| Context Length | 25% | Token limits, codebase size |
-| Cost Budget | 20% | Per-token pricing, budget remaining |
-| Latency Requirement | 15% | Real-time vs batch processing |
-| Historical Performance | 10% | Success rate, quality scores for task type |
+| Factor                 | Weight | Considerations                              |
+| ---------------------- | ------ | ------------------------------------------- |
+| Task Category          | 30%    | Code generation, analysis, planning, review |
+| Context Length         | 25%    | Token limits, codebase size                 |
+| Cost Budget            | 20%    | Per-token pricing, budget remaining         |
+| Latency Requirement    | 15%    | Real-time vs batch processing               |
+| Historical Performance | 10%    | Success rate, quality scores for task type  |
 
 **Model Registry**:
 
@@ -269,35 +287,35 @@ models:
     cost_per_1m_tokens: 15.00
     strengths: [reasoning, long_context, code_review]
     latency_p95: 3000ms
-    
+
   - id: gpt-4-turbo
     provider: openai
     context_window: 128000
     cost_per_1m_tokens: 10.00
     strengths: [code_generation, structured_output]
     latency_p95: 2000ms
-    
+
   - id: gemini-1.5-pro
     provider: google
     context_window: 2000000
     cost_per_1m_tokens: 3.50
     strengths: [long_context, multimodal]
     latency_p95: 4000ms
-    
+
   - id: deepseek-coder-v2
     provider: deepseek
     context_window: 32000
     cost_per_1m_tokens: 0.50
     strengths: [code_generation, cost_efficient]
     latency_p95: 5000ms
-    
+
   - id: qwen-2.5-coder
     provider: alibaba
     context_window: 32000
     cost_per_1m_tokens: 0.40
     strengths: [code_generation, multilingual]
     latency_p95: 4500ms
-    
+
   - id: llama-3.1-405b
     provider: local
     context_window: 128000
@@ -313,7 +331,7 @@ def select_model(task: Task, context: RoutingContext) -> Model:
     # Filter by hard constraints
     candidates = filter_by_context_length(task.context_size)
     candidates = filter_by_capabilities(task.category)
-    
+
     # Score candidates
     scores = []
     for model in candidates:
@@ -325,20 +343,22 @@ def select_model(task: Task, context: RoutingContext) -> Model:
             availability_score(model) * 0.1
         )
         scores.append((model, score))
-    
+
     # Select highest scoring with fallback chain
     primary = max(scores, key=lambda x: x[1])[0]
     fallback = get_fallback_chain(primary)
-    
+
     return ModelSelection(primary=primary, fallbacks=fallback)
 ```
 
 **Failover Strategy**:
+
 - Primary model timeout → Fallback 1
 - Fallback 1 rate limit → Fallback 2
 - All models exhausted → Queue for retry with exponential backoff
 
 **Technology Stack**:
+
 - Python (routing logic)
 - Redis (model performance cache)
 - PostgreSQL (historical performance data)
@@ -350,12 +370,14 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 **Purpose**: Generate production-quality code for assigned tasks
 
 **Agent Types**:
+
 - **Backend Coding Agent**: APIs, business logic, database access
 - **Frontend Coding Agent**: UI components, state management, styling
 - **DevOps Coding Agent**: Infrastructure as Code, CI/CD pipelines
 - **Database Coding Agent**: Schema migrations, queries, optimizations
 
 **Shared Responsibilities**:
+
 - Read task specifications
 - Analyze existing codebase context
 - Generate code following project conventions
@@ -365,6 +387,7 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 - Submit work for review
 
 **Execution Model**:
+
 - Each coding agent operates in isolated workspace
 - Workspace = ephemeral git clone + sandbox container
 - File system operations validated by policy engine
@@ -388,18 +411,21 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 ```
 
 **Context Management**:
+
 - Use semantic search to find relevant files
 - Apply sliding window for large files
 - Maintain conversation history for multi-turn generation
 - Cache expensive computations (AST parsing, embeddings)
 
 **Quality Controls**:
+
 - Linting (language-specific)
 - Type checking (TypeScript, Python with mypy)
 - Security scanning (Semgrep, Bandit)
 - Complexity analysis (Cyclomatic complexity)
 
 **Technology Stack**:
+
 - Python (agent framework)
 - LangChain (LLM orchestration)
 - Docker (sandboxed execution)
@@ -407,6 +433,7 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 - GitPython (version control)
 
 **Scaling Strategy**:
+
 - Pool of worker agents (Kubernetes pods)
 - Horizontal autoscaling based on task queue depth
 - Resource limits per agent (CPU, memory, disk)
@@ -473,16 +500,17 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 
 **Review Decision Matrix**:
 
-| Category | Severity | Action |
-|----------|----------|--------|
-| Security vulnerability (CVSS >= 7.0) | Critical | Block merge |
-| Security vulnerability (CVSS < 7.0) | High | Require acknowledgment |
-| Performance regression > 20% | High | Block merge |
-| Test coverage < 80% | Medium | Warn |
-| Complexity score > 15 | Medium | Warn |
-| Style violations | Low | Auto-fix or warn |
+| Category                             | Severity | Action                 |
+| ------------------------------------ | -------- | ---------------------- |
+| Security vulnerability (CVSS >= 7.0) | Critical | Block merge            |
+| Security vulnerability (CVSS < 7.0)  | High     | Require acknowledgment |
+| Performance regression > 20%         | High     | Block merge            |
+| Test coverage < 80%                  | Medium   | Warn                   |
+| Complexity score > 15                | Medium   | Warn                   |
+| Style violations                     | Low      | Auto-fix or warn       |
 
 **Technology Stack**:
+
 - Python (review orchestration)
 - Semgrep (security scanning)
 - SonarQube (code quality)
@@ -490,6 +518,7 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 - GitHub API / GitLab API (PR interaction)
 
 **Quality Metrics**:
+
 - False positive rate
 - Critical bugs caught
 - Review turnaround time
@@ -545,13 +574,13 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 
 **Test Framework Selection**:
 
-| Language | Unit Testing | E2E Testing |
-|----------|-------------|-------------|
-| Python | pytest | pytest + Selenium |
-| JavaScript/TypeScript | Jest | Playwright |
-| Go | testing package | Testify |
-| Java | JUnit 5 | Selenium |
-| Rust | cargo test | - |
+| Language              | Unit Testing    | E2E Testing       |
+| --------------------- | --------------- | ----------------- |
+| Python                | pytest          | pytest + Selenium |
+| JavaScript/TypeScript | Jest            | Playwright        |
+| Go                    | testing package | Testify           |
+| Java                  | JUnit 5         | Selenium          |
+| Rust                  | cargo test      | -                 |
 
 **Coverage Requirements**:
 
@@ -561,18 +590,21 @@ def select_model(task: Task, context: RoutingContext) -> Model:
 - Public API coverage: 100%
 
 **Test Execution Environment**:
+
 - Isolated container per test suite
 - Fresh database instance (testcontainers)
 - Mocked external services
 - Configurable resource limits
 
 **Technology Stack**:
+
 - Python (test orchestration)
 - Docker (test isolation)
 - Coverage.py / Istanbul (coverage analysis)
 - Allure (test reporting)
 
 **Quality Metrics**:
+
 - Test generation time
 - Test execution time
 - Test flakiness rate
@@ -653,27 +685,30 @@ def calculate_overall_score(metrics: Dict[str, float]) -> float:
         'performance': 0.10,
         'testability': 0.10
     }
-    
+
     weighted_score = sum(
         metrics[dim] * weights[dim]
         for dim in weights.keys()
     )
-    
+
     return weighted_score
 ```
 
 **Thresholds**:
+
 - Minimum acceptable score: 70/100
 - Production deployment score: 85/100
 - Excellence threshold: 95/100
 
 **Historical Analysis**:
+
 - Track evaluation scores over time
 - Identify agent performance trends
 - Detect model degradation
 - Optimize routing based on evaluation history
 
 **Technology Stack**:
+
 - Python (evaluation engine)
 - PostgreSQL (evaluation history)
 - TimescaleDB (time-series analysis)
@@ -686,15 +721,15 @@ def calculate_overall_score(metrics: Dict[str, float]) -> float:
 
 **Approval Requirements**:
 
-| Operation | Approval Type | Timeout |
-|-----------|---------------|---------|
-| Production deployment | Explicit approval | 24 hours |
+| Operation                       | Approval Type     | Timeout  |
+| ------------------------------- | ----------------- | -------- |
+| Production deployment           | Explicit approval | 24 hours |
 | Database migration (production) | Explicit approval | 24 hours |
-| Repository merge to main | Explicit approval | 4 hours |
-| Infrastructure modification | Explicit approval | 8 hours |
-| Security policy change | Explicit approval | 48 hours |
-| Agent configuration change | Implicit (notify) | - |
-| Cost exceeding threshold | Explicit approval | 1 hour |
+| Repository merge to main        | Explicit approval | 4 hours  |
+| Infrastructure modification     | Explicit approval | 8 hours  |
+| Security policy change          | Explicit approval | 48 hours |
+| Agent configuration change      | Implicit (notify) | -        |
+| Cost exceeding threshold        | Explicit approval | 1 hour   |
 
 **Approval Workflow**:
 
@@ -716,6 +751,7 @@ def calculate_overall_score(metrics: Dict[str, float]) -> float:
 **Approval Context**:
 
 Approval requests include:
+
 - Operation description
 - Risk assessment
 - Impact analysis
@@ -726,18 +762,21 @@ Approval requests include:
 - Test results
 
 **Approval Interface**:
+
 - Web dashboard with rich context
 - Slack/Teams integration for quick approval
 - Email with approval link
 - CLI for programmatic approval
 
 **Timeout Handling**:
+
 - Configurable timeout per operation type
 - Default action (approve/deny/escalate)
 - Escalation chain for expired approvals
 - Automatic rollback on timeout
 
 **Technology Stack**:
+
 - Python (approval orchestration)
 - React (approval dashboard)
 - PostgreSQL (approval history)
@@ -856,6 +895,7 @@ is_protected_path(path) if {
 ```
 
 **Policy Management**:
+
 - Policies stored in Git repository
 - Version controlled with semantic versioning
 - CI/CD pipeline for policy testing
@@ -863,6 +903,7 @@ is_protected_path(path) if {
 - Rollback capability for policy errors
 
 **Technology Stack**:
+
 - Open Policy Agent (policy engine)
 - Rego (policy language)
 - Git (policy version control)
@@ -878,6 +919,7 @@ is_protected_path(path) if {
 #### 4.2.1 Input Guardrails
 
 **Prompt Injection Detection**:
+
 ```python
 def detect_prompt_injection(user_input: str) -> bool:
     """
@@ -893,22 +935,24 @@ def detect_prompt_injection(user_input: str) -> bool:
         r"admin mode",
         r"developer mode",
     ]
-    
+
     for pattern in suspicious_patterns:
         if re.search(pattern, user_input, re.IGNORECASE):
             return True
-    
+
     # Use ML model for sophisticated injection detection
     injection_score = ml_model.predict(user_input)
     return injection_score > 0.8
 ```
 
 **PII Detection**:
+
 - Detect and redact: SSN, credit card, email, phone, API keys
 - Prevent logging of sensitive information
 - Alert security team on detection
 
 **Jailbreak Detection**:
+
 - Detect attempts to bypass safety mechanisms
 - Pattern matching + ML classification
 - Immediate workflow termination on detection
@@ -916,11 +960,13 @@ def detect_prompt_injection(user_input: str) -> bool:
 #### 4.2.2 Output Guardrails
 
 **Sensitive Data Exposure**:
+
 - Scan agent outputs for secrets
 - Prevent credentials in logs or artifacts
 - Automated redaction
 
 **Harmful Content**:
+
 - Detect generated code with known vulnerabilities
 - Block malicious code patterns
 - Validate against security policies
@@ -928,51 +974,55 @@ def detect_prompt_injection(user_input: str) -> bool:
 #### 4.2.3 Operational Guardrails
 
 **Infinite Loop Detection**:
+
 ```python
 def detect_infinite_loop(agent_id: str, history: List[Action]) -> bool:
     """
     Detect if agent is stuck in repetitive behavior.
     """
     window = history[-10:]  # Last 10 actions
-    
+
     # Check for repeated identical actions
     if len(window) >= 5:
         if len(set(window)) <= 2:
             return True
-    
+
     # Check for cyclic patterns
     if has_cycle(window, min_cycle_length=3):
         return True
-    
+
     return False
 ```
 
 **Cost Limit Protection**:
+
 ```python
 def check_cost_limit(workflow_id: str, current_cost: float) -> bool:
     """
     Prevent runaway costs from agent execution.
     """
     limits = get_workflow_limits(workflow_id)
-    
+
     if current_cost > limits.hard_limit:
         emergency_stop_workflow(workflow_id)
         notify_admins(workflow_id, current_cost)
         return False
-    
+
     if current_cost > limits.soft_limit:
         notify_owner(workflow_id, current_cost)
         request_approval_to_continue(workflow_id)
-    
+
     return True
 ```
 
 **Token Usage Protection**:
+
 - Per-agent token budgets
 - Per-workflow token limits
 - Rate limiting for expensive models
 
 **Tool Misuse Detection**:
+
 - Validate tool calls against expected patterns
 - Detect unauthorized tool access
 - Flag anomalous tool usage frequency
@@ -999,35 +1049,35 @@ guardrails:
       enabled: true
       sensitivity: high
       action: block
-    
+
     pii_detection:
       enabled: true
       entities: [ssn, credit_card, email, phone, api_key]
       action: redact
-  
+
   output:
     secret_scanning:
       enabled: true
       patterns: [aws_key, gcp_key, github_token]
       action: block
-    
+
     code_vulnerability:
       enabled: true
       severity_threshold: medium
       action: warn
-  
+
   operational:
     infinite_loop:
       enabled: true
       detection_window: 10
       action: terminate
-    
+
     cost_limit:
       enabled: true
       soft_limit_usd: 100
       hard_limit_usd: 500
       action: pause_and_notify
-    
+
     token_limit:
       enabled: true
       per_agent_limit: 1000000
@@ -1036,6 +1086,7 @@ guardrails:
 ```
 
 **Technology Stack**:
+
 - NVIDIA NeMo Guardrails (primary)
 - Python (custom guardrails)
 - Redis (rate limiting)
@@ -1057,6 +1108,7 @@ guardrails:
 ### 5.2 Key Metrics
 
 **System-Level Metrics**:
+
 - Workflow throughput (workflows/min)
 - P50, P95, P99 latency
 - Error rate by component
@@ -1065,6 +1117,7 @@ guardrails:
 - Token consumption rate
 
 **Agent-Level Metrics**:
+
 - Task completion time
 - Success rate
 - Retry count
@@ -1073,6 +1126,7 @@ guardrails:
 - Cost per task
 
 **Model-Level Metrics**:
+
 - Request rate per model
 - Average response time
 - Token usage
@@ -1081,6 +1135,7 @@ guardrails:
 - Context length distribution
 
 **Business Metrics**:
+
 - Lines of code generated per hour
 - Bug fix rate
 - Test coverage trend
@@ -1170,7 +1225,7 @@ trace = langfuse.trace(
 # Record agent execution
 with trace.span(name="coding_agent_execution") as span:
     span.update(metadata={"agent": "backend-coding-agent"})
-    
+
     # Record LLM call
     generation = span.generation(
         name="code_generation",
@@ -1178,9 +1233,9 @@ with trace.span(name="coding_agent_execution") as span:
         input=prompt,
         metadata={"temperature": 0.7}
     )
-    
+
     result = llm.generate(prompt)
-    
+
     generation.end(
         output=result,
         usage={"input": tokens_input, "output": tokens_output},
@@ -1198,6 +1253,7 @@ trace.score(
 ### 5.4 Logging Strategy
 
 **Log Levels**:
+
 - DEBUG: Detailed diagnostic information
 - INFO: General informational messages
 - WARN: Warning messages (degraded operation)
@@ -1226,6 +1282,7 @@ trace.score(
 ```
 
 **Log Aggregation**:
+
 - Centralized log collection (Fluentd/Fluent Bit)
 - Storage in Elasticsearch/Loki
 - Retention: 90 days hot, 1 year cold, 7 years archive
@@ -1235,6 +1292,7 @@ trace.score(
 **Audit Requirements**:
 
 All the following must be logged:
+
 - Agent actions (create, read, update, delete)
 - Policy decisions (allow, deny)
 - Approval requests and responses
@@ -1272,12 +1330,14 @@ All the following must be logged:
 ```
 
 **Audit Log Properties**:
+
 - Immutable (append-only)
 - Tamper-evident (cryptographic hashing)
 - Retention: 7 years (compliance requirement)
 - Exportable for compliance audits
 
 **Technology Stack**:
+
 - Langfuse (LLM observability)
 - Prometheus (metrics)
 - Grafana (visualization)
@@ -1296,6 +1356,7 @@ All the following must be logged:
 **Purpose**: Persistent storage of durable knowledge
 
 **Stored Data**:
+
 - Technical specifications
 - Architectural decisions (ADRs)
 - Historical evaluations
@@ -1389,6 +1450,7 @@ CREATE TABLE lessons_learned (
 **Technology**: PostgreSQL with pgvector extension
 
 **Rationale**:
+
 - ACID compliance for critical data
 - Rich query capabilities (JSON, full-text, vector)
 - Mature replication and backup
@@ -1399,6 +1461,7 @@ CREATE TABLE lessons_learned (
 **Purpose**: Ephemeral state for active workflows
 
 **Stored Data**:
+
 - Workflow execution state
 - Agent conversation history
 - Temporary file references
@@ -1469,6 +1532,7 @@ rate_limit = {
 **Technology**: Redis
 
 **Rationale**:
+
 - Sub-millisecond latency
 - Built-in TTL for automatic cleanup
 - Atomic operations for consistency
@@ -1477,6 +1541,7 @@ rate_limit = {
 - Sorted sets for priority queues
 
 **TTL Strategy**:
+
 - Workflow state: 7 days after completion
 - Conversation history: 1 hour
 - Task queue: Until completion
@@ -1492,6 +1557,7 @@ rate_limit = {
 **Purpose**: Decouple agents through asynchronous messaging
 
 **Event Bus Requirements**:
+
 - High throughput (10k+ messages/sec)
 - Low latency (< 10ms)
 - At-least-once delivery
@@ -1503,16 +1569,17 @@ rate_limit = {
 
 **Selection Rationale**:
 
-| Feature | NATS | Kafka | RabbitMQ |
-|---------|------|-------|----------|
-| Latency | < 1ms | 5-10ms | 2-5ms |
-| Throughput | Very High | Very High | High |
-| Operational Complexity | Low | High | Medium |
-| Cloud-Native | Yes | Yes | Yes |
-| Stream Replay | Yes (JetStream) | Yes | Limited |
-| Language Support | Excellent | Excellent | Excellent |
+| Feature                | NATS            | Kafka     | RabbitMQ  |
+| ---------------------- | --------------- | --------- | --------- |
+| Latency                | < 1ms           | 5-10ms    | 2-5ms     |
+| Throughput             | Very High       | Very High | High      |
+| Operational Complexity | Low             | High      | Medium    |
+| Cloud-Native           | Yes             | Yes       | Yes       |
+| Stream Replay          | Yes (JetStream) | Yes       | Limited   |
+| Language Support       | Excellent       | Excellent | Excellent |
 
 **Decision**: NATS with JetStream
+
 - Superior latency for real-time coordination
 - Simpler operational model than Kafka
 - Native Kubernetes support
@@ -1561,12 +1628,14 @@ rate_limit = {
 ### 7.4 Event Types
 
 **Lifecycle Events**:
+
 - `workflow.started`
 - `workflow.completed`
 - `workflow.failed`
 - `workflow.cancelled`
 
 **Task Events**:
+
 - `task.created`
 - `task.assigned`
 - `task.started`
@@ -1575,23 +1644,27 @@ rate_limit = {
 - `task.retrying`
 
 **Agent Events**:
+
 - `agent.started`
 - `agent.stopped`
 - `agent.heartbeat`
 - `agent.error`
 
 **Approval Events**:
+
 - `approval.requested`
 - `approval.granted`
 - `approval.denied`
 - `approval.timeout`
 
 **Evaluation Events**:
+
 - `evaluation.started`
 - `evaluation.completed`
 - `evaluation.threshold_failed`
 
 **Review Events**:
+
 - `review.started`
 - `review.completed`
 - `review.approved`
@@ -1656,11 +1729,13 @@ retry_policy = {
 ```
 
 **Dead Letter Queue**:
+
 - Events that fail after max retries → DLQ
 - Manual inspection and replay capability
 - Alerting on DLQ accumulation
 
 **Technology Stack**:
+
 - NATS with JetStream
 - Persistent streams for durability
 - Consumer acknowledgments for reliability
@@ -1672,6 +1747,7 @@ retry_policy = {
 ### 8.1 Isolation Requirements
 
 **Security Principles**:
+
 - **Zero Trust**: Assume all agent code is potentially malicious
 - **Least Privilege**: Grant minimum required permissions
 - **Defense in Depth**: Multiple layers of isolation
@@ -1758,23 +1834,23 @@ spec:
   requiredDropCapabilities:
     - ALL
   volumes:
-    - 'emptyDir'
-    - 'secret'
-    - 'configMap'
+    - "emptyDir"
+    - "secret"
+    - "configMap"
   hostNetwork: false
   hostIPC: false
   hostPID: false
   runAsUser:
-    rule: 'MustRunAsNonRoot'
+    rule: "MustRunAsNonRoot"
     ranges:
       - min: 10000
         max: 20000
   seLinux:
-    rule: 'RunAsAny'
+    rule: "RunAsAny"
   supplementalGroups:
-    rule: 'RunAsAny'
+    rule: "RunAsAny"
   fsGroup:
-    rule: 'RunAsAny'
+    rule: "RunAsAny"
   readOnlyRootFilesystem: false
 ```
 
@@ -1785,16 +1861,17 @@ spec:
 ```yaml
 resources:
   limits:
-    cpu: "2"              # 2 CPU cores
-    memory: "2Gi"         # 2GB RAM
-    ephemeral-storage: "10Gi"  # 10GB disk
+    cpu: "2" # 2 CPU cores
+    memory: "2Gi" # 2GB RAM
+    ephemeral-storage: "10Gi" # 10GB disk
   requests:
-    cpu: "500m"           # 0.5 CPU cores
-    memory: "512Mi"       # 512MB RAM
-    ephemeral-storage: "1Gi"   # 1GB disk
+    cpu: "500m" # 0.5 CPU cores
+    memory: "512Mi" # 512MB RAM
+    ephemeral-storage: "1Gi" # 1GB disk
 ```
 
 **Execution Timeouts**:
+
 - Task execution: 30 minutes max
 - Idle timeout: 5 minutes
 - Total workflow: 4 hours max
@@ -1802,11 +1879,13 @@ resources:
 ### 8.5 Network Restrictions
 
 **Allowed Outbound**:
+
 - LLM API endpoints (OpenAI, Anthropic, Google)
 - Package registries (npm, PyPI, Maven)
 - Internal services (via service mesh)
 
 **Denied Outbound**:
+
 - Public internet (except allowed)
 - Internal network (except allowed services)
 - Cloud metadata endpoints (169.254.169.254)
@@ -1859,10 +1938,12 @@ spec:
 ### 8.6 Filesystem Restrictions
 
 **Read-Only Base System**:
+
 - Base image filesystem mounted read-only
 - Prevents tampering with system files
 
 **Writable Workspace**:
+
 ```
 /workspace/              (read-write, 10GB limit)
   ├── .git/              (managed by agent)
@@ -1871,6 +1952,7 @@ spec:
 ```
 
 **Prohibited Paths**:
+
 - `/etc/`
 - `/sys/`
 - `/proc/`
@@ -1880,18 +1962,21 @@ spec:
 ### 8.7 Monitoring & Enforcement
 
 **Runtime Monitoring**:
+
 - Syscall auditing (via gVisor)
 - Resource usage tracking
 - Network traffic inspection
 - File access logging
 
 **Enforcement Actions**:
+
 - CPU throttling on overuse
 - Memory limit OOMKill
 - Network connection reset
 - Container termination on policy violation
 
 **Technology Stack**:
+
 - Docker (container runtime)
 - gVisor/runsc (enhanced isolation)
 - Kubernetes (orchestration)
@@ -1904,20 +1989,21 @@ spec:
 ### 9.1 Horizontal Scaling Strategy
 
 **Stateless Agent Services**:
+
 - Agent instances are stateless
 - State stored externally (PostgreSQL, Redis)
 - Enable seamless scaling up/down
 
 **Scaling Dimensions**:
 
-| Component | Scaling Trigger | Min Instances | Max Instances |
-|-----------|----------------|---------------|---------------|
-| Orchestrator | Workflow queue depth | 2 | 20 |
-| Coding Agent | Task queue depth | 5 | 100 |
-| Review Agent | PR queue depth | 2 | 50 |
-| Test Agent | Test queue depth | 3 | 50 |
-| Evaluation Agent | Eval queue depth | 2 | 20 |
-| Model Router | Request rate | 2 | 10 |
+| Component        | Scaling Trigger      | Min Instances | Max Instances |
+| ---------------- | -------------------- | ------------- | ------------- |
+| Orchestrator     | Workflow queue depth | 2             | 20            |
+| Coding Agent     | Task queue depth     | 5             | 100           |
+| Review Agent     | PR queue depth       | 2             | 50            |
+| Test Agent       | Test queue depth     | 3             | 50            |
+| Evaluation Agent | Eval queue depth     | 2             | 20            |
+| Model Router     | Request rate         | 2             | 10            |
 
 **Auto-Scaling Policy** (Kubernetes HPA):
 
@@ -1968,6 +2054,7 @@ spec:
 ### 9.2 Multi-Tenancy
 
 **Isolation Requirements**:
+
 - Resource isolation (CPU, memory, network)
 - Data isolation (separate databases/schemas)
 - Cost isolation (per-tenant billing)
@@ -1996,6 +2083,7 @@ CREATE TABLE tenants (
 ```
 
 **Tenant Routing**:
+
 ```python
 # Every request includes tenant context
 @app.route('/workflows', methods=['POST'])
@@ -2004,17 +2092,18 @@ def create_workflow(tenant_id: str):
     # Validate tenant limits
     if not check_tenant_limits(tenant_id):
         return error_response(429, "Tenant limit exceeded")
-    
+
     # Route to tenant-specific resources
     workflow = orchestrator.create_workflow(
         tenant_id=tenant_id,
         spec=request.json
     )
-    
+
     return success_response(workflow)
 ```
 
-**Data Isolation Strategy**: 
+**Data Isolation Strategy**:
+
 - **Option 1**: Database per tenant (strong isolation, high overhead)
 - **Option 2**: Schema per tenant (good isolation, moderate overhead)
 - **Option 3**: Row-level security (weak isolation, low overhead)
@@ -2034,7 +2123,7 @@ agents:
         deployed: "2026-06-15"
         image: "agents/coding:2.1.0"
         compatibility: ">=1.0.0"
-      
+
       - version: "2.2.0"
         status: "canary"
         deployed: "2026-06-18"
@@ -2044,6 +2133,7 @@ agents:
 ```
 
 **Canary Deployment**:
+
 1. Deploy new version alongside old
 2. Route 10% of traffic to new version
 3. Monitor error rates, latency, quality scores
@@ -2052,20 +2142,21 @@ agents:
 6. If any issues: rollback immediately
 
 **Version Selection**:
+
 ```python
 def select_agent_version(agent_type: str, tenant_id: str) -> str:
     # Check tenant preference
     if tenant_config := get_tenant_agent_version(tenant_id, agent_type):
         return tenant_config.version
-    
+
     # Apply canary routing
     versions = get_agent_versions(agent_type)
     stable = [v for v in versions if v.status == "stable"][0]
     canary = [v for v in versions if v.status == "canary"]
-    
+
     if canary and random.random() < canary[0].traffic_percentage / 100:
         return canary[0].version
-    
+
     return stable.version
 ```
 
@@ -2082,11 +2173,11 @@ workflow:
     - name: "specification"
       agent: "spec_agent"
       version: ">=2.0.0"
-    
+
     - name: "planning"
       agent: "planner_agent"
       version: ">=1.5.0"
-    
+
     - name: "implementation"
       parallel: true
       tasks:
@@ -2097,6 +2188,7 @@ workflow:
 ```
 
 **Backward Compatibility**:
+
 - Support N-2 workflow versions simultaneously
 - Graceful degradation for deprecated features
 - Migration tools for upgrading workflows
@@ -2105,13 +2197,13 @@ workflow:
 
 **Backup Strategy**:
 
-| Component | Backup Frequency | Retention | RTO | RPO |
-|-----------|-----------------|-----------|-----|-----|
-| PostgreSQL (state) | Continuous WAL | 30 days | 1 hour | 5 minutes |
-| Redis (cache) | None | - | 0 | Acceptable loss |
-| NATS (events) | Snapshots hourly | 7 days | 30 minutes | 1 hour |
-| Artifacts (S3) | Cross-region replication | 7 years | 2 hours | 15 minutes |
-| Configs | Git-backed | Infinite | 15 minutes | 1 minute |
+| Component          | Backup Frequency         | Retention | RTO        | RPO             |
+| ------------------ | ------------------------ | --------- | ---------- | --------------- |
+| PostgreSQL (state) | Continuous WAL           | 30 days   | 1 hour     | 5 minutes       |
+| Redis (cache)      | None                     | -         | 0          | Acceptable loss |
+| NATS (events)      | Snapshots hourly         | 7 days    | 30 minutes | 1 hour          |
+| Artifacts (S3)     | Cross-region replication | 7 years   | 2 hours    | 15 minutes      |
+| Configs            | Git-backed               | Infinite  | 15 minutes | 1 minute        |
 
 **Recovery Procedures**:
 
@@ -2136,6 +2228,7 @@ workflow:
    - Time: < 2 hours
 
 **Chaos Engineering**:
+
 - Regular disaster recovery drills (monthly)
 - Chaos testing in staging environment
 - Automated failover testing
@@ -2147,12 +2240,14 @@ workflow:
 ### 10.1 Threat Model
 
 **Threat Actors**:
+
 1. **External Attackers**: Attempting to compromise system
 2. **Malicious Tenants**: Attempting to access other tenant data
 3. **Compromised Agents**: Agent behaving maliciously (prompt injection)
 4. **Insider Threats**: Malicious employees or contractors
 
 **Attack Vectors**:
+
 - Prompt injection attacks
 - Code injection via generated code
 - Credential theft
@@ -2166,6 +2261,7 @@ workflow:
 #### 10.2.1 Authentication & Authorization
 
 **API Authentication**:
+
 - OAuth 2.0 with JWT tokens
 - API key authentication for service accounts
 - Mutual TLS for service-to-service
@@ -2181,16 +2277,16 @@ roles:
       - "workflow:update"
       - "workflow:delete"
       - "workflow:execute"
-  
+
   - name: "workflow_viewer"
     permissions:
       - "workflow:read"
-  
+
   - name: "approver"
     permissions:
       - "approval:grant"
       - "approval:deny"
-  
+
   - name: "agent_operator"
     permissions:
       - "agent:read"
@@ -2198,6 +2294,7 @@ roles:
 ```
 
 **Service Accounts**:
+
 - Each agent type has dedicated service account
 - Minimum required permissions
 - Token rotation every 24 hours
@@ -2205,11 +2302,13 @@ roles:
 #### 10.2.2 Data Protection
 
 **Encryption at Rest**:
+
 - Database: AES-256 encryption
 - Object storage: Server-side encryption (S3)
 - Secrets: HashiCorp Vault
 
 **Encryption in Transit**:
+
 - TLS 1.3 for all external communication
 - mTLS for service-to-service communication
 - Certificate rotation every 90 days
@@ -2224,15 +2323,16 @@ def get_api_key(service: str) -> str:
         role='agent-service',
         jwt=read_service_account_token()
     )
-    
+
     secret = vault_client.secrets.kv.v2.read_secret(
         path=f'agents/{service}/api_key'
     )
-    
+
     return secret['data']['data']['key']
 ```
 
 **PII Protection**:
+
 - Automatic PII detection in inputs/outputs
 - Encryption of PII fields
 - Access logging for PII access
@@ -2241,16 +2341,19 @@ def get_api_key(service: str) -> str:
 #### 10.2.3 Vulnerability Management
 
 **Dependency Scanning**:
+
 - Daily scans of agent dependencies
 - Automated PR creation for security updates
 - Block deployment with critical vulnerabilities
 
 **Container Scanning**:
+
 - Scan all container images before deployment
 - Vulnerability database updates daily
 - Fail pipeline on high/critical CVEs
 
 **Penetration Testing**:
+
 - Quarterly external penetration tests
 - Annual red team exercises
 - Bug bounty program
@@ -2258,12 +2361,14 @@ def get_api_key(service: str) -> str:
 #### 10.2.4 Incident Response
 
 **Security Monitoring**:
+
 - Anomaly detection on agent behavior
 - Failed authentication alerts
 - Privilege escalation attempts
 - Data exfiltration detection
 
 **Incident Response Plan**:
+
 1. **Detection**: Automated alerts + SIEM
 2. **Triage**: Security team assessment
 3. **Containment**: Isolate affected components
@@ -2272,6 +2377,7 @@ def get_api_key(service: str) -> str:
 6. **Lessons Learned**: Post-mortem, update defenses
 
 **Security Runbooks**:
+
 - Compromised credentials
 - Data breach
 - DDoS attack
@@ -2347,6 +2453,7 @@ def get_api_key(service: str) -> str:
 **Technology**: Istio
 
 **Features**:
+
 - Automatic mTLS between services
 - Traffic management (load balancing, retries)
 - Circuit breaking
@@ -2451,6 +2558,7 @@ spec:
 8. Decommission blue
 
 **Rollback Criteria** (automatic):
+
 - Error rate > 1%
 - P95 latency increase > 50%
 - Memory usage > 90%
@@ -2461,6 +2569,7 @@ spec:
 **Technology**: Terraform + Helm
 
 **Repository Structure**:
+
 ```
 infrastructure/
 ├── terraform/
@@ -2491,7 +2600,7 @@ infrastructure/
 ```hcl
 module "kubernetes" {
   source = "./modules/kubernetes"
-  
+
   cluster_name    = "multi-agent-${var.environment}"
   region          = var.region
   node_pools = {
@@ -2542,6 +2651,7 @@ module "kubernetes" {
    - Cost: Optimized for performance
 
 **Environment Promotion**:
+
 ```
 Dev → Staging → Production
 (auto) (auto)  (manual approval)
@@ -2550,11 +2660,13 @@ Dev → Staging → Production
 ### 12.2 Release Process
 
 **Release Cadence**:
+
 - **Hotfixes**: As needed (< 2 hours)
 - **Minor releases**: Weekly
 - **Major releases**: Monthly
 
 **Release Checklist**:
+
 - [ ] All tests passing (unit, integration, E2E)
 - [ ] Security scan clean
 - [ ] Performance benchmarks meet SLA
@@ -2573,7 +2685,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   release:
@@ -2581,31 +2693,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Build & Test
         run: make test
-      
+
       - name: Security Scan
         run: make security-scan
-      
+
       - name: Build Images
         run: make build-images
-      
+
       - name: Push Images
         run: make push-images
-      
+
       - name: Deploy to Staging
         run: make deploy-staging
-      
+
       - name: Run E2E Tests
         run: make test-e2e-staging
-      
+
       - name: Wait for Approval
         uses: trstringer/manual-approval@v1
-      
+
       - name: Deploy to Production
         run: make deploy-production
-      
+
       - name: Monitor Deployment
         run: make monitor-deployment
 ```
@@ -2614,17 +2726,18 @@ jobs:
 
 **Key Alerts**:
 
-| Alert | Threshold | Severity | Action |
-|-------|-----------|----------|--------|
-| Error rate | > 1% | Critical | Page on-call |
-| Latency P95 | > 5s | High | Investigate |
-| Cost spike | > 50% increase | Medium | Review |
-| Agent failure rate | > 5% | High | Investigate |
-| Disk usage | > 85% | Medium | Scale storage |
-| Memory usage | > 90% | High | Scale pods |
-| Certificate expiry | < 7 days | High | Renew |
+| Alert              | Threshold      | Severity | Action        |
+| ------------------ | -------------- | -------- | ------------- |
+| Error rate         | > 1%           | Critical | Page on-call  |
+| Latency P95        | > 5s           | High     | Investigate   |
+| Cost spike         | > 50% increase | Medium   | Review        |
+| Agent failure rate | > 5%           | High     | Investigate   |
+| Disk usage         | > 85%          | Medium   | Scale storage |
+| Memory usage       | > 90%          | High     | Scale pods    |
+| Certificate expiry | < 7 days       | High     | Renew         |
 
 **On-Call Rotation**:
+
 - Primary: 7-day shifts
 - Secondary: Backup
 - 24/7 coverage
@@ -2705,26 +2818,26 @@ jobs:
 
 ## 14. Technology Stack Summary
 
-| Component | Technology | Rationale |
-|-----------|-----------|-----------|
-| **Orchestration** | Temporal.io | Durable workflows, retry logic |
-| **Agent Framework** | LangChain + Python | Rich LLM ecosystem, flexibility |
-| **API Gateway** | Kong | Feature-rich, cloud-native |
-| **Event Bus** | NATS with JetStream | Low latency, operational simplicity |
-| **Policy Engine** | Open Policy Agent | Industry standard for policy as code |
-| **Guardrails** | NeMo Guardrails | Pre-built, extensible |
-| **Long-Term Memory** | PostgreSQL + pgvector | ACID compliance, vector search |
-| **Short-Term Memory** | Redis | Sub-ms latency, rich data structures |
-| **Observability** | Langfuse + Prometheus + Grafana | LLM-specific + general observability |
-| **Logging** | Elasticsearch + Fluentd | Scalable log aggregation |
-| **Tracing** | Jaeger | Distributed tracing standard |
-| **Container Runtime** | Docker + gVisor | Security isolation |
-| **Orchestration** | Kubernetes | Industry standard, cloud-agnostic |
-| **Service Mesh** | Istio | mTLS, observability, traffic mgmt |
-| **Secrets Management** | HashiCorp Vault | Enterprise-grade secrets |
-| **CI/CD** | GitHub Actions | Integrated with code repository |
-| **IaC** | Terraform + Helm | Declarative infrastructure |
-| **Load Balancer** | Cloud Load Balancer | Managed service, high availability |
+| Component              | Technology                      | Rationale                            |
+| ---------------------- | ------------------------------- | ------------------------------------ |
+| **Orchestration**      | Temporal.io                     | Durable workflows, retry logic       |
+| **Agent Framework**    | LangChain + Python              | Rich LLM ecosystem, flexibility      |
+| **API Gateway**        | Kong                            | Feature-rich, cloud-native           |
+| **Event Bus**          | NATS with JetStream             | Low latency, operational simplicity  |
+| **Policy Engine**      | Open Policy Agent               | Industry standard for policy as code |
+| **Guardrails**         | NeMo Guardrails                 | Pre-built, extensible                |
+| **Long-Term Memory**   | PostgreSQL + pgvector           | ACID compliance, vector search       |
+| **Short-Term Memory**  | Redis                           | Sub-ms latency, rich data structures |
+| **Observability**      | Langfuse + Prometheus + Grafana | LLM-specific + general observability |
+| **Logging**            | Elasticsearch + Fluentd         | Scalable log aggregation             |
+| **Tracing**            | Jaeger                          | Distributed tracing standard         |
+| **Container Runtime**  | Docker + gVisor                 | Security isolation                   |
+| **Orchestration**      | Kubernetes                      | Industry standard, cloud-agnostic    |
+| **Service Mesh**       | Istio                           | mTLS, observability, traffic mgmt    |
+| **Secrets Management** | HashiCorp Vault                 | Enterprise-grade secrets             |
+| **CI/CD**              | GitHub Actions                  | Integrated with code repository      |
+| **IaC**                | Terraform + Helm                | Declarative infrastructure           |
+| **Load Balancer**      | Cloud Load Balancer             | Managed service, high availability   |
 
 ---
 
@@ -2761,16 +2874,19 @@ jobs:
 **Phase 1** (Current): Core platform with essential agents
 
 **Phase 2** (Q3 2026):
+
 - Multi-modal agents (image, video)
 - Advanced code optimization agents
 - Automated performance tuning
 
 **Phase 3** (Q4 2026):
+
 - Self-improving agents (learning from feedback)
 - Adversarial testing agents
 - Compliance verification agents
 
 **Phase 4** (2027):
+
 - General reasoning agents
 - Cross-project knowledge transfer
 - Autonomous system architecture
@@ -2789,6 +2905,7 @@ jobs:
 This architecture provides a production-grade foundation for a Multi-Agent Software Engineering Platform capable of autonomously performing the complete software development lifecycle.
 
 **Key Strengths**:
+
 - **Scalable**: Handles 100+ concurrent workflows
 - **Secure**: Multiple layers of isolation and governance
 - **Observable**: Complete traceability of all actions
@@ -2796,6 +2913,7 @@ This architecture provides a production-grade foundation for a Multi-Agent Softw
 - **Reliable**: Fault-tolerant with comprehensive retry logic
 
 **Design Philosophy**:
+
 - **Safety First**: Guardrails and policy enforcement at every layer
 - **Fail Gracefully**: Comprehensive error handling and fallback strategies
 - **Observable by Design**: Every action logged, traced, and metered
@@ -2807,9 +2925,9 @@ This system is designed to operate at scale in production environments, handling
 
 **Document Control**
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0.0 | 2026-06-18 | AI Architect | Initial architecture |
+| Version | Date       | Author       | Changes              |
+| ------- | ---------- | ------------ | -------------------- |
+| 1.0.0   | 2026-06-18 | AI Architect | Initial architecture |
 
 **Review & Approval**
 

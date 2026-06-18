@@ -20,12 +20,12 @@ dependencies:
     version: "12.x.x"
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
-  
+
   - name: redis
     version: "17.x.x"
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
-  
+
   - name: nats
     version: "0.19.x"
     repository: https://nats-io.github.io/k8s/helm/charts/

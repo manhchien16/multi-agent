@@ -1,0 +1,25 @@
+# Docker Compose Override Example
+# Copy this to docker-compose.override.yml to use custom PostgreSQL image
+# cp docker-compose.override.yml.example docker-compose.override.yml
+
+version: '3.8'
+
+services:
+  # Use custom PostgreSQL image with pgvector
+  postgres:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    image: multiagent-postgres:latest
+    # Uncomment to use custom config
+    # volumes:
+    #   - ./config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf
+
+  # Add development tools
+  # Uncomment to always run pgAdmin and Redis Commander
+  # pgadmin:
+  #   profiles: []
+  
+  # redis-commander:
+  #   profiles: []
